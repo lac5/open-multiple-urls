@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "Open Mulitple URLs",
+  "version": "1.0",
+  "background": {
+    "scripts": ["browser-action.js"]
+  },
+  "browser_action": {},
+  "permissions": [
+    "cookies"
+  ]
+}
