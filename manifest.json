@@ -2,6 +2,10 @@
   "manifest_version": 2,
   "name": "Open Mulitple URLs",
   "version": "1.0",
+  "icons": {
+    "48": "arrow.svg",
+    "96": "arrow.svg"
+  },
   "background": {
     "scripts": ["browser-action.js"]
   },
