@@ -1,21 +1,23 @@
 {
   "name": "open-multiple-urls",
   "description": "An extension that can open a list of URLs at once.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Larry",
   "license": "MIT",
   "keywords": [],
   "main": "main.js",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "cross-env PUBLIC_URL=. react-scripts build"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
