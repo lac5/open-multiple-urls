@@ -3,8 +3,8 @@
   "name": "Open Mulitple URLs",
   "version": "1.0",
   "icons": {
-    "48": "build/arrow.svg",
-    "96": "build/arrow.svg"
+    "48": "arrow.svg",
+    "96": "arrow.svg"
   },
   "background": {
     "scripts": ["browser-action.js"]

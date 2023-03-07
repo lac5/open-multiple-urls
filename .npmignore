@@ -20,6 +20,7 @@
 !/LICENSE
 !/build
 !/browser-action.js
+!/arrow.svg
 
 # misc
 .DS_Store
