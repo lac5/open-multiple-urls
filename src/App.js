@@ -1,56 +1,78 @@
-import { useState } from 'react';
+import React from 'react'
 import './bootstrap/bootstrap.min.css';
 
-function App() {
-  const [urlBoxValue, setUrlBoxValue] = useState('');
-  const [cooldownTimeValue, setCooldownTimeValue] = useState('0');
-  const [dontLoadPageChecked, setDontLoadPageChecked] = useState(true);
-  const [reverseOrderChecked, setReverseOrderChecked] = useState(true);
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      urlBoxValue: '',
+      cooldownTimeValue: '0',
+      dontLoadPageChecked: true,
+      reverseOrderChecked: true,
+    };
+  }
+  render() {
+    return (
+      <div className="container mt-5">
+        <div className="row">
+          <div className="col">
+            <label for="urlBox">URL list</label>
+            <textarea id="urlBox" className="form-control" rows="10"
+              value={this.state.urlBoxValue}
+              onChange={e => this.setState({ urlBoxValue: e.target.value })}
+              ></textarea>
+          </div>
+        </div>
+        <div className="row mt-3">
+          <div className="col text-right">
+            <button id="extractBtn" type="button" class="btn btn-secondary"
+              onClick={() => this.extractBtnClick()}
+              >Extract URLs</button>
+          </div>
+        </div>
+        <div className="row mt-3">
+          <label htmlFor="cooldownTime" className="col-sm-2 col-form-label">Cooldown</label>
+          <div className="col-sm-10">
+            <input id="cooldownTime" className="form-control-plaintext" type="number" step="0.01"
+              value={this.state.cooldownTimeValue}
+              onChange={e => this.setState({ cooldownTimeValue: e.target.value })}
+              />
+          </div>
+        </div>
+        <hr />
+        <div className="row">
+          <div className="col">
+            <input id="dontLoadPage" type="checkbox"
+              checked={this.state.dontLoadPageChecked}
+              onChange={e => this.setState({ dontLoadPageChecked: e.target.checked })}
+              />
+            <label htmlFor="dontLoadPage">Don't load pages right away.</label>
+          </div>
+          <div className="col">
+            <input id="reverseOrder" type="checkbox"
+              checked={this.state.reverseOrderChecked}
+              onChange={e => this.setState({ reverseOrderChecked: e.target.checked })}
+              />
+            <label htmlFor="reverseOrder">Go in reverse order.</label>
+          </div>
+          <div className="col text-right">
+            <button id="goBtn" type="button" className="btn btn-primary"
+              onClick={() => this.goBtnClick()}
+              >Go</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-  return (
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col">
-          <label for="urlBox">URL list</label>
-          <textarea id="urlBox" class="form-control" rows="10" value={urlBoxValue} onChange={e => setUrlBoxValue(e.target.value)}></textarea>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col text-right">
-          <button id="extractBtn" type="button" class="btn btn-secondary" onClick={extractBtnClick}>Extract URLs</button>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <label for="cooldownTime" class="col-sm-2 col-form-label">Cooldown</label>
-        <div class="col-sm-10">
-          <input id="cooldownTime" class="form-control-plaintext" type="number" step="0.01" value={cooldownTimeValue} onChange={e => setCooldownTimeValue(e.target.value)} />
-        </div>
-      </div>
-      <hr />
-      <div class="row">
-        <div class="col">
-          <input id="dontLoadPage" type="checkbox" checked={dontLoadPageChecked} onChange={e => setDontLoadPageChecked(e.target.value)} />
-          <label for="dontLoadPage">Don't load pages right away.</label>
-        </div>
-        <div class="col">
-          <input id="reverseOrder" type="checkbox" checked={reverseOrderChecked} onChange={e => setReverseOrderChecked(e.target.value)} />
-          <label for="reverseOrder">Go in reverse order.</label>
-        </div>
-        <div class="col text-right">
-          {<button id="goBtn" type="button" class="btn btn-primary" onClick={goBtnClick}>Go</button>}
-        </div>
-      </div>
-    </div>
-  );
-
-  async function goBtnClick() {
+  async goBtnClick() {
     try {
       let current = await browser.tabs.getCurrent();
-      let redirect = dontLoadPageChecked ? browser.extension.getURL('build/redirect.html') +'#' : '';
-      let cooldown = parseFloat(cooldownTimeValue) * 1000;
+      let redirect = this.state.dontLoadPageChecked ? browser.extension.getURL('build/redirect.html') +'#' : '';
+      let cooldown = parseFloat(this.state.cooldownTimeValue) * 1000;
   
-      let urls = urlBoxValue.split(/\r?\n/g);
-      if (reverseOrderChecked) {
+      let urls = this.state.urlBoxValue.split(/\r?\n/g);
+      if (this.state.reverseOrderChecked) {
         urls.reverse();
       }
   
@@ -78,9 +100,13 @@ function App() {
     }
   }
 
-  function extractBtnClick() {
+  extractBtnClick() {
     try {
-      setUrlBoxValue((urlBoxValue.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig) || []).join('\n'));
+      this.setState({
+        urlBoxValue: (this.state.urlBoxValue
+          .match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig) || [])
+          .join('\n')
+      });
     } catch (e) {
       alert(e);
     }
