@@ -1,3 +1,6 @@
+/* This file needs to be seperate from the HTML file because Firefox won't let inline scripts chang the location. 
+ */
+
 const url = location.hash.slice(1);
 
 if (url) {
