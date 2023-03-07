@@ -1,4 +1,4 @@
-import './App.css';
+import './bootstrap/bootstrap.min.css';
 
 const browser = this.browser;
 
