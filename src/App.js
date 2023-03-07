@@ -1,17 +1,18 @@
+import { useState } from 'react';
 import './bootstrap/bootstrap.min.css';
 
 function App() {
-  const urlBox = <textarea id="urlBox" class="form-control" rows="10"></textarea>;
-  const cooldownTime = <input id="cooldownTime" class="form-control-plaintext" type="number" step="0.01" value="0" />;
-  const dontLoadPage = <input id="dontLoadPage" type="checkbox" checked />;
-  const reverseOrder = <input id="reverseOrder" type="checkbox" checked />;
+  const [urlBoxValue, setUrlBoxValue] = useState('');
+  const [cooldownTimeValue, setCooldownTimeValue] = useState('0');
+  const [dontLoadPageChecked, setDontLoadPageChecked] = useState(true);
+  const [reverseOrderChecked, setReverseOrderChecked] = useState(true);
 
   return (
     <div class="container mt-5">
       <div class="row">
         <div class="col">
           <label for="urlBox">URL list</label>
-          {urlBox}
+          <textarea id="urlBox" class="form-control" rows="10" value={urlBoxValue} onChange={setUrlBoxValue}></textarea>
         </div>
       </div>
       <div class="row mt-3">
@@ -22,17 +23,17 @@ function App() {
       <div class="row mt-3">
         <label for="cooldownTime" class="col-sm-2 col-form-label">Cooldown</label>
         <div class="col-sm-10">
-          {cooldownTime}
+          <input id="cooldownTime" class="form-control-plaintext" type="number" step="0.01" value={cooldownTimeValue} onChange={setCooldownTimeValue} />
         </div>
       </div>
       <hr />
       <div class="row">
         <div class="col">
-          {dontLoadPage}
+          <input id="dontLoadPage" type="checkbox" checked={dontLoadPageChecked} onChange={setDontLoadPageChecked} />
           <label for="dontLoadPage">Don't load pages right away.</label>
         </div>
         <div class="col">
-          {reverseOrder}
+          <input id="reverseOrder" type="checkbox" checked={reverseOrderChecked} onChange={setReverseOrderChecked} />
           <label for="reverseOrder">Go in reverse order.</label>
         </div>
         <div class="col text-right">
@@ -45,11 +46,11 @@ function App() {
   async function goBtnClick() {
     try {
       let current = await browser.tabs.getCurrent();
-      let redirect = dontLoadPage.checked ? browser.extension.getURL('redirect.html') +'#' : '';
-      let cooldown = parseFloat(cooldownTime.value) * 1000;
+      let redirect = dontLoadPageChecked ? browser.extension.getURL('redirect.html') +'#' : '';
+      let cooldown = parseFloat(cooldownTimeValue) * 1000;
   
-      let urls = urlBox.value.split(/\r?\n/g);
-      if (reverseOrder.checked) {
+      let urls = urlBoxValue.split(/\r?\n/g);
+      if (reverseOrderChecked) {
         urls.reverse();
       }
   
@@ -79,7 +80,7 @@ function App() {
 
   function extractBtnClick() {
     try {
-      urlBox.value = (urlBox.value.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig) || []).join('\n');
+      setUrlBoxValue((urlBoxValue.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig) || []).join('\n'));
     } catch (e) {
       alert(e);
     }
