@@ -46,7 +46,7 @@ function App() {
   async function goBtnClick() {
     try {
       let current = await browser.tabs.getCurrent();
-      let redirect = dontLoadPageChecked ? browser.extension.getURL('redirect.html') +'#' : '';
+      let redirect = dontLoadPageChecked ? browser.extension.getURL('build/redirect.html') +'#' : '';
       let cooldown = parseFloat(cooldownTimeValue) * 1000;
   
       let urls = urlBoxValue.split(/\r?\n/g);

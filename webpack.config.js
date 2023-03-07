@@ -3,10 +3,15 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     mode: process.env.NODE_ENV || 'development',
-    entry: "./src/index.js",
+    entry: {
+        main: "./src/index.js",
+        redirect: './src/redirect.js',
+    },
     output: {
-        filename: "main.js",
         path: path.resolve(__dirname, "build"),
+        filename: '[name].bundle.js',
+        chunkFilename: '[id].bundle_[chunkhash].js',
+        sourceMapFilename: '[file].map',
     },
     module: {
         // exclude node_modules
@@ -27,7 +32,14 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-        template: path.join(__dirname, "public", "index.html"),
+            filename: 'index.html',
+            template: path.join(__dirname, "public", "index.html"),
+            chunks: ['main'],
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'redirect.html',
+            template: path.join(__dirname, "public", "redirect.html"),
+            chunks: ['redirect'],
         }),
     ],
     devtool: 'cheap-source-map',
