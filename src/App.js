@@ -24,10 +24,15 @@ class App extends React.Component {
           </div>
         </div>
         <div className="row mt-3">
-          <div className="col text-right">
+          <div className="col text-left">
             <button id="extractBtn" type="button" class="btn btn-secondary"
               onClick={() => this.extractBtnClick()}
               >Extract URLs</button>
+          </div>
+          <div className="col text-right">
+            <button id="shuffleBtn" type="button" class="btn btn-secondary"
+              onClick={() => this.shuffleBtnClick()}
+              >Shuffle</button>
           </div>
         </div>
         <div className="row mt-3">
@@ -106,6 +111,22 @@ class App extends React.Component {
         urlBoxValue: (this.state.urlBoxValue
           .match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig) || [])
           .join('\n')
+      });
+    } catch (e) {
+      alert(e);
+    }
+  }
+
+  shuffleBtnClick() {
+    try {
+      let lines = this.state.urlBoxValue.split('\n');
+      for (let i = lines.length; i > 1;) {
+        i--;
+        let j = Math.floor(Math.random() * i);
+        [lines[i], lines[j]] = [lines[j], lines[i]];
+      }
+      this.setState({
+        urlBoxValue: lines.join('\n')
       });
     } catch (e) {
       alert(e);
