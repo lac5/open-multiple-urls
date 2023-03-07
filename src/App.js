@@ -12,7 +12,7 @@ function App() {
       <div class="row">
         <div class="col">
           <label for="urlBox">URL list</label>
-          <textarea id="urlBox" class="form-control" rows="10" value={urlBoxValue} onChange={setUrlBoxValue}></textarea>
+          <textarea id="urlBox" class="form-control" rows="10" value={urlBoxValue} onChange={e => setUrlBoxValue(e.target.value)}></textarea>
         </div>
       </div>
       <div class="row mt-3">
@@ -23,17 +23,17 @@ function App() {
       <div class="row mt-3">
         <label for="cooldownTime" class="col-sm-2 col-form-label">Cooldown</label>
         <div class="col-sm-10">
-          <input id="cooldownTime" class="form-control-plaintext" type="number" step="0.01" value={cooldownTimeValue} onChange={setCooldownTimeValue} />
+          <input id="cooldownTime" class="form-control-plaintext" type="number" step="0.01" value={cooldownTimeValue} onChange={e => setCooldownTimeValue(e.target.value)} />
         </div>
       </div>
       <hr />
       <div class="row">
         <div class="col">
-          <input id="dontLoadPage" type="checkbox" checked={dontLoadPageChecked} onChange={setDontLoadPageChecked} />
+          <input id="dontLoadPage" type="checkbox" checked={dontLoadPageChecked} onChange={e => setDontLoadPageChecked(e.target.value)} />
           <label for="dontLoadPage">Don't load pages right away.</label>
         </div>
         <div class="col">
-          <input id="reverseOrder" type="checkbox" checked={reverseOrderChecked} onChange={setReverseOrderChecked} />
+          <input id="reverseOrder" type="checkbox" checked={reverseOrderChecked} onChange={e => setReverseOrderChecked(e.target.value)} />
           <label for="reverseOrder">Go in reverse order.</label>
         </div>
         <div class="col text-right">
