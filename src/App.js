@@ -1,7 +1,5 @@
 import './bootstrap/bootstrap.min.css';
 
-const browser = this.browser;
-
 function App() {
   const urlBox = <textarea id="urlBox" class="form-control" rows="10"></textarea>;
   const cooldownTime = <input id="cooldownTime" class="form-control-plaintext" type="number" step="0.01" value="0" />;
