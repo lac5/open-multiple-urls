@@ -1,8 +1,11 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
+const nodeEnv = process.env.NODE_ENV || 'development';
+const isProd = nodeEnv === 'production';
+
 module.exports = {
-    mode: process.env.NODE_ENV || 'development',
+    mode: nodeEnv,
     entry: {
         main: "./src/index.js",
         redirect: './src/redirect.js',
@@ -42,5 +45,5 @@ module.exports = {
             chunks: ['redirect'],
         }),
     ],
-    devtool: 'cheap-source-map',
+    devtool: isProd ? 'source-map' : 'cheap-source-map',
 };
