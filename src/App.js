@@ -5,6 +5,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isGoing: false,
+      timeout: null,
       urlBoxValue: '',
       cooldownTimeValue: '0',
       dontLoadPageChecked: true,
@@ -51,19 +53,25 @@ class App extends React.Component {
               checked={this.state.dontLoadPageChecked}
               onChange={e => this.setState({ dontLoadPageChecked: e.target.checked })}
               />
-            <label htmlFor="dontLoadPage">Don't load pages right away.</label>
+            <label htmlFor="dontLoadPage">{'\u00A0'}Don't load pages right away.</label>
           </div>
           <div className="col">
             <input id="reverseOrder" type="checkbox"
               checked={this.state.reverseOrderChecked}
               onChange={e => this.setState({ reverseOrderChecked: e.target.checked })}
               />
-            <label htmlFor="reverseOrder">Go in reverse order.</label>
+            <label htmlFor="reverseOrder">{'\u00A0'}Go in reverse order.</label>
           </div>
           <div className="col text-right">
-            <button id="goBtn" type="button" className="btn btn-primary"
-              onClick={() => this.goBtnClick()}
-              >Go</button>
+            { !this.state.isGoing ? 
+              <button id="goStopBtn" type="button" className="btn btn-primary"
+                onClick={() => this.goBtnClick()}
+                >Go</button>
+              :
+              <button id="goStopBtn" type="button" className="btn btn-warning"
+                onClick={() => this.stopBtnClick()}
+                >Stop</button>
+            }
           </div>
         </div>
       </div>
@@ -72,6 +80,12 @@ class App extends React.Component {
 
   async goBtnClick() {
     try {
+      if (this.state.isGoing) return;
+      this.state.isGoing = true;
+      this.setState({
+        isGoing: true,
+      });
+
       let current = await browser.tabs.getCurrent();
       let redirect = this.state.dontLoadPageChecked ? browser.extension.getURL('build/redirect.html') +'#' : '';
       let cooldown = parseFloat(this.state.cooldownTimeValue) * 1000;
@@ -80,9 +94,10 @@ class App extends React.Component {
       if (this.state.reverseOrderChecked) {
         urls.reverse();
       }
-  
+
       await urls.reduce(async (p, url) => {
         await p;
+        if (!this.state.isGoing) return;
         url = url.trim();
         if (url) {
           try {
@@ -96,10 +111,33 @@ class App extends React.Component {
           }
   
           if (cooldown > 0) {
-            await new Promise(resolve => setTimeout(resolve, cooldown));
+            await new Promise(resolve => {
+              this.setState({
+                timeout: setTimeout(resolve, cooldown)
+              });
+            });
           }
         }
       }, Promise.resolve());
+    } catch (e) {
+      alert(e);
+    } finally {
+      this.stopBtnClick();
+    }
+  }
+
+  stopBtnClick() {
+    try {
+      if (this.state.isGoing) {
+        let nextState = {
+          isGoing: false,
+        };
+        if (this.state.timeout != null) {
+          clearTimeout(this.state.timeout);
+          nextState.timeout = null;
+        }
+        this.setState(nextState);
+      }
     } catch (e) {
       alert(e);
     }
