@@ -1,5 +1,6 @@
-import React from 'react'
-import './bootstrap/bootstrap.min.css';
+import React from 'react';
+
+await import('./bootstrap/bootstrap.min.css');
 
 class App extends React.Component {
   constructor(props) {

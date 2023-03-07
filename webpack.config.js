@@ -46,4 +46,12 @@ module.exports = {
         }),
     ],
     devtool: isProd ? 'source-map' : 'cheap-source-map',
+    experiments: {
+      topLevelAwait: true,
+    },
+    performance: isProd ? {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
+    } : false,
 };
